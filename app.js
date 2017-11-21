@@ -8,6 +8,8 @@ function requestHandler(req, res) {
 
 var server = http.createServer(requestHandler);
 
-server.listen(PORT () => {
+server.listen(PORT, () => {
   console.log(`Server listening on http://localhost:${PORT}`);
 })
+// Returns request path (route) and the request method, which is a GET
+// (i.e. fetching a web page).
