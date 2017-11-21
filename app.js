@@ -3,7 +3,14 @@ const PORT = 8080;
 
 // Function to handle requests and returns responses.
 function requestHandler(req, res) {
-  res.end(`\nRequested Path: ${req.url}\nRequest Method: ${req.method}`);
+  if (req.url == "/") {
+    res.end("Welcome!");
+  } else if (req.url == "/urls") {
+    res.end("www.lighthouselabs.ca\nwww.google.ca");
+  } else {
+    res.statusCode = 404;
+    res.end("Unknown path!");
+  }
 }
 
 var server = http.createServer(requestHandler);
