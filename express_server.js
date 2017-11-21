@@ -10,7 +10,10 @@ let urlDatabase = {
 app.get("/", (req, res) => {
   res.end("Hello!");
 });
- 
-app.listen(PORT () => {
-  console.log(`\nListening on PORT: ${PORT}\n`);
+app.get("/hello", (req, res) => {
+  res.end(`\nURL Database:\n${urlDatabase}`);
 })
+ 
+app.listen(PORT, () => {
+  console.log(`\nListening on PORT: ${PORT}\n`)
+});
