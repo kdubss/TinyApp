@@ -104,7 +104,7 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-// TODO: Create a POST /regiester page that will take in incoming form data
+// TODO: Create a POST /register page that will take in incoming form data
 // from the register.ejs form.
 // This endpoint will handle all of the registration form data
 app.post('/register', (req, res) => {
