@@ -43,6 +43,18 @@ app.get('/urls/:id', (req, res) => {
   });
 });
 
+// TODO: In our urls_index.ejs template we will add a form element for
+// each shortened URL. The form should use POST method:
+// TODO: Add a POST route that removes a URL resource: POST /urls/:id/delete
+// TODO: After the resource has been deleted, redirect the client back to the
+// urls_index page
+app.post('/urls/:id/delete', (req, res) => {
+  console.log('\nNow in the POST for /urls/:id/delete');
+  const shortURL = req.params.id;
+  delete urlDatabase[shortURL];
+  res.redirect('/');
+});
+
 app.listen(PORT, () => {
   console.log(`\nListening on PORT: ${PORT}\n`)
 });
