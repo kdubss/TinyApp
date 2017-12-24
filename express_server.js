@@ -76,6 +76,12 @@ app.post('/urls/:id/update', (req, res) => {
   res.redirect('/urls');
 });
 
+// TODO: Create a GET /register endpoint,
+// which returns a page that includes a form with an email and password field.
+app.get('/registration', (req, res) => {
+  res.render('registration');
+});
+
 app.listen(PORT, () => {
   console.log(`\nListening on PORT: ${PORT}\n`)
 });
