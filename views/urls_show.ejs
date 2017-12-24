@@ -6,10 +6,16 @@
   <h1>LongURL for the shortURL: <%= shortURL %></h1>
 
   <% if (urls[shortURL]) { %>
-    <% console.log(urls[shortURL]) %>
     <ul>
       <li>shortURL: <%= shortURL %></li>
       <li>longURL: <%= urls[shortURL] %></li>
+      <li>
+        <form action='/urls/<%= shortURL %>/update' method='POST'>
+          <input placeholder='http://' type='text' value='<%= urls[shortURL] %>'
+            name='updatedLongURL' id='updatedLongURL'>
+          <input type='submit' value='Update URL'>
+        </form>
+      </li>
     </ul>
   <% } %>
 </body>
