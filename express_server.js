@@ -1,12 +1,17 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = process.env.PORT || 8080 // default
 
 app.set('view engine', 'ejs');
+app.use(bodyParser());
+// BodyParser is a middleware that allows the parsing of inocming requests via
+// <forms> or <input> elements, through the req.body
 
 let urlDatabase = {
-  'b2xVn2': "http://www.lighthouselabs.ca",
-  '9sm5xK': "http://www.google.com"
+  'b2xVn2': 'http://www.lighthouselabs.ca',
+  '9sm5xK': 'http://www.google.com'
 }
 
 app.get('/', (req, res) => {
@@ -39,7 +44,8 @@ app.get('/urls/:id', (req, res) => {
   const shortURL = req.params.id
   res.render('urls_show', {
     urls: urlDatabase,
-    shortURL: shortURL
+    shortURL: shortURL,
+    longURL: urlDatabase[shortURL]
   });
 });
 
@@ -53,6 +59,21 @@ app.post('/urls/:id/delete', (req, res) => {
   const shortURL = req.params.id;
   delete urlDatabase[shortURL];
   res.redirect('/');
+});
+
+// TODO: Updating URLs - using a POST request (should allow to edit an
+// existing URL)
+// TODO: Once the user submits an Update request,
+// it should modify the corresponding longURL, and
+// then redirect the client back to "/urls".
+app.post('/urls/:id/update', (req, res) => {
+  const shortURL = req.params.id;
+  const updatedLongURL = req.body.updatedLongURL;
+  console.log('\nNow about to POST an update for /urls/:id/update');
+  console.log('\nShortURL: ', shortURL);
+  console.log('\nReq.body.updatedLongURL: ', updatedLongURL)
+  urlDatabase[shortURL] = updatedLongURL;
+  res.redirect('/urls');
 });
 
 app.listen(PORT, () => {
