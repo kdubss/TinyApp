@@ -9,9 +9,22 @@ app.use(bodyParser());
 // BodyParser is a middleware that allows the parsing of inocming requests via
 // <forms> or <input> elements, through the req.body
 
-let urlDatabase = {
+const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
+}
+
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
 }
 
 app.get('/', (req, res) => {
@@ -78,8 +91,21 @@ app.post('/urls/:id/update', (req, res) => {
 
 // TODO: Create a GET /register endpoint,
 // which returns a page that includes a form with an email and password field.
-app.get('/registration', (req, res) => {
-  res.render('registration');
+app.get('/register', (req, res) => {
+  res.render('register');
+});
+
+// TODO: Create a POST /regiester page that will take in incoming form data
+// from the register.ejs form.
+// This endpoint will handle all of the registration form data
+app.post('/register', (req, res) => {
+  console.log('Now making a POST on the /register endpoint!');
+  const userID = req.body.userID;
+  const userEmail = req.body.userEmail;
+  const userPass = req.body.userPass;
+  console.log('\nUser ID: ', userID);
+  console.log('\nUser Email: ', userEmail);
+  console.log('\nUser Pass: ', userPass);
 });
 
 app.listen(PORT, () => {
