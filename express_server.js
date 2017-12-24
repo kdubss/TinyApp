@@ -9,6 +9,15 @@ app.use(bodyParser());
 // BodyParser is a middleware that allows the parsing of inocming requests via
 // <forms> or <input> elements, through the req.body
 
+/**
+ * [Function to return an random ID from A-Z.]
+ * @return {[String]} [description]
+ */
+function makeRandomId() {
+  randomId = Math.random().toString(36).replace(/^[A-Z]/).substring(2, 12);
+  return randomId;
+}
+
 const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
@@ -100,12 +109,23 @@ app.get('/register', (req, res) => {
 // This endpoint will handle all of the registration form data
 app.post('/register', (req, res) => {
   console.log('Now making a POST on the /register endpoint!');
-  const userID = req.body.userID;
+  const userID = makeRandomId()
   const userEmail = req.body.userEmail;
   const userPass = req.body.userPass;
+  const newUser = {
+    id: userID,
+    email: userEmail,
+    password: userPass
+  }
+  console.log('\nNew User object: ', newUser)
   console.log('\nUser ID: ', userID);
   console.log('\nUser Email: ', userEmail);
   console.log('\nUser Pass: ', userPass);
+  // TODO: Add newUser object to 'users' database object:
+  // users database have keys which are the same as the userID.
+  users[userID] = newUser;
+  res.redirect('/urls');
+  console.log(users);
 });
 
 app.listen(PORT, () => {
