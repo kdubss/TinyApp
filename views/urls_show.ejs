@@ -1,0 +1,9 @@
+<h1>LongURL for the shortURL: <%= shortURL %></h1>
+
+<% if (urls[shortURL]) { %>
+  <% console.log(urls[shortURL]) %>
+  <ul>
+    <li>shortURL: <%= shortURL %></li>
+    <li>longURL: <%= urls[shortURL] %></li>
+  </ul>
+<% } %>
