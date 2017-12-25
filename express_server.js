@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = process.env.PORT || 8080 // default
@@ -8,6 +9,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser());
 // BodyParser is a middleware that allows the parsing of inocming requests via
 // <forms> or <input> elements, through the req.body
+app.use(cookieParser());
 
 /**
  * [Function to return an random ID from A-Z.]
@@ -37,7 +39,7 @@ const users = {
 }
 
 app.get('/', (req, res) => {
-  res.send('Hello!');
+  res.redirect('/urls');
 });
 app.get('/hello', (req, res) => {
   res.send(`\nURL Database: ${urlDatabase}`);
@@ -99,7 +101,8 @@ app.post('/urls/:id/update', (req, res) => {
 });
 
 // TODO: Create a GET /register endpoint,
-// which returns a page that includes a form with an email and password field.
+// which returns a page that includes a form with an email and password
+// field.
 app.get('/register', (req, res) => {
   res.render('register');
 });
@@ -126,6 +129,18 @@ app.post('/register', (req, res) => {
   users[userID] = newUser;
   res.redirect('/urls');
   console.log(users);
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', (req, res) => {
+  console.log('\nMaking a POST to the /login endpoint');
+  // Currently the POST is making it's way here upon click of
+  // the 'Submit' button.
+  const userCookie = res.cookie('newUserCookie', 'firstCookie');
+  res.redirect('/')
 });
 
 app.listen(PORT, () => {
