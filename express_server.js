@@ -20,6 +20,23 @@ function makeRandomId() {
   return randomId;
 }
 
+/**
+ * [findUserByEmail description]
+ * @return {[type]} [description]
+ */
+function findUserByEmail(email) {
+  let foundUser = false;
+
+  for (let key in users) {
+    const user = users[key];
+
+    if (email === user.example) {
+      foundUser = user;
+    }
+  }
+  return foundUser;
+};
+
 const urlDatabase = {
   'b2xVn2': 'http://www.lighthouselabs.ca',
   '9sm5xK': 'http://www.google.com'
@@ -132,7 +149,9 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login');
+  res.render('urls_login', {
+    newUserLogin: req.cookies['username']
+  });
 });
 
 app.post('/login', (req, res) => {
@@ -140,6 +159,8 @@ app.post('/login', (req, res) => {
   // Currently the POST is making it's way here upon click of
   // the 'Submit' button.
   const userCookie = res.cookie('newUserCookie', 'firstCookie');
+  // Cookie is being set to for new users, both from the /login endpoint
+  // and the _header partial!
   res.redirect('/')
 });
 
