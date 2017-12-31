@@ -149,7 +149,7 @@ app.post('/register', (req, res) => {
   // TODO: Add newUser object to 'users' database object:
   // users database have keys which are the same as the userID.
   users[userID] = newUser;
-  req.session.user_id = users[userID].id
+  req.session.user_id  = users[userID].id
   res.redirect('/urls');
   console.log(users);
 });
@@ -160,12 +160,13 @@ app.get('/login', (req, res) => {
 
 app.post('/login', (req, res) => {
   console.log('\nMaking a POST to the /login endpoint');
-  let { email, password } = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
   const user = findUserByEmail(email);
-  if (!(users[user])) {
+  if (!(users[user.id])) {
     res.send('You are not registered, please register <a href=\'/register\'>here</a>');
   } else {
-    req.session.user_id = user.id;
+    req.session.user_id = user.id
     res.redirect('/');
   }
 });
