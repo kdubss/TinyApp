@@ -179,8 +179,8 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-  req.session.user_id = null;
-  res.redirect('/');
+  req.session = null;
+  res.redirect('/urls_home');
 });
 
 app.listen(PORT, () => {
