@@ -9,12 +9,14 @@ const app = express();
 const PORT = process.env.PORT || 8080 // default
 
 app.set('view engine', 'ejs');
+
 app.use(bodyParser());
 app.use(cookieParser());
 app.use(cookieSession({
   name: 'session',
   keys: ['lighthouse']
-}))
+}));
+app.use(express.static(__dirname + '/public'));
 
 /**
  * [Function to return an random ID from A-Z.]
@@ -155,7 +157,8 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('urls_login');
+  res.render('urls_login', {
+  });
 });
 
 app.post('/login', (req, res) => {
