@@ -1,6 +1,10 @@
-<form action='/login' method='GET'>
-  <input type='submit' value='login'>
-</form>
-<form action='/logout' method='POST'>
-  <input type='submit' value='Logout'>
-</form>
+<% if (!user) { %>
+  <h2><a href='/register'>Register Email</a>&nbsp; &nbsp;
+    <a href='/login'>Login</a></h2>
+<% } else { %>
+  <h2>You are logged in as <%= user.email %></h2>
+
+  <form action='/logout' method='POST'>
+    <input type='submit' value='Logout'>
+  </form>
+<% } %>
