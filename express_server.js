@@ -63,8 +63,12 @@ const users = {
 }
 
 app.get('/', (req, res) => {
-  res.redirect('/urls');
+  res.redirect('urls_home');
 });
+app.get('/urls_home', (req, res) => {
+  res.render('urls_home');
+})
+
 app.get('/hello', (req, res) => {
   res.send(`\nURL Database: ${urlDatabase}`);
 });
@@ -172,6 +176,11 @@ app.post('/login', (req, res) => {
     req.session.user_id = user.id
     res.redirect('/');
   }
+});
+
+app.post('/logout', (req, res) => {
+  req.session.user_id = null;
+  res.redirect('/');
 });
 
 app.listen(PORT, () => {
