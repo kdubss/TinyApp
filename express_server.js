@@ -1,15 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = process.env.PORT || 8080 // default
 
 app.set('view engine', 'ejs');
 app.use(bodyParser());
-// BodyParser is a middleware that allows the parsing of inocming requests via
-// <forms> or <input> elements, through the req.body
 app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: ['lighthouse']
+}))
 
 /**
  * [Function to return an random ID from A-Z.]
@@ -30,7 +35,7 @@ function findUserByEmail(email) {
   for (let key in users) {
     const user = users[key];
 
-    if (email === user.example) {
+    if (email === user.email) {
       foundUser = user;
     }
   }
@@ -121,7 +126,7 @@ app.post('/urls/:id/update', (req, res) => {
 // which returns a page that includes a form with an email and password
 // field.
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('urls_register');
 });
 
 // TODO: Create a POST /register page that will take in incoming form data
@@ -144,24 +149,25 @@ app.post('/register', (req, res) => {
   // TODO: Add newUser object to 'users' database object:
   // users database have keys which are the same as the userID.
   users[userID] = newUser;
+  req.session.user_id = users[userID].id
   res.redirect('/urls');
   console.log(users);
 });
 
 app.get('/login', (req, res) => {
-  res.render('urls_login', {
-    newUserLogin: req.cookies['username']
-  });
+  res.render('urls_login');
 });
 
 app.post('/login', (req, res) => {
   console.log('\nMaking a POST to the /login endpoint');
-  // Currently the POST is making it's way here upon click of
-  // the 'Submit' button.
-  const userCookie = res.cookie('newUserCookie', 'firstCookie');
-  // Cookie is being set to for new users, both from the /login endpoint
-  // and the _header partial!
-  res.redirect('/')
+  let { email, password } = req.body;
+  const user = findUserByEmail(email);
+  if (!(users[user])) {
+    res.send('You are not registered, please register <a href=\'/register\'>here</a>');
+  } else {
+    req.session.user_id = user.id;
+    res.redirect('/');
+  }
 });
 
 app.listen(PORT, () => {
