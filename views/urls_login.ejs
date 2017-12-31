@@ -1,9 +1,15 @@
+<head>
+  <link rel='stylesheet' type='text/css' href='/css/style.css'>
+</head>
+
 <header>
   <% include partials/_header %>
 </header>
 
-<h1>Welcome to the <em>Login</em> page</h1>
-<p><small>If you're not a registered <em>user</em>, make sure to <b><u><a href = "/register">register, first!</a></u></b></small></p>
+<div class='welcome'>
+  <h1>Welcome to the <em>Login</em> page</h1>
+  <p><small>If you're not a registered <em>user</em>, make sure to <b><u><a href = "/register">register, first!</a></u></b></small></p>
+</div>
 
 <form action="/login" method="POST">
 
