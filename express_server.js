@@ -67,7 +67,6 @@ app.get('/', (req, res) => {
 });
 app.get('/urls_home', (req, res) => {
   const user = users[req.session.user_id];
-  console.log('\nSession for logged in user: ', user.email);
   res.render('urls_home', {
     user: user
   });
@@ -145,30 +144,38 @@ app.post('/urls/:id/update', (req, res) => {
 // which returns a page that includes a form with an email and password
 // field.
 app.get('/register', (req, res) => {
-  res.render('urls_register');
+  const user = users[req.session.user_id];
+  res.render('urls_register', {
+    user: user
+  });
 });
 
 // TODO: Create a POST /register page that will take in incoming form data
 // from the register.ejs form.
 // This endpoint will handle all of the registration form data
 app.post('/register', (req, res) => {
-  console.log('Now making a POST on the /register endpoint!');
-  const userID = makeRandomId()
   const userEmail = req.body.userEmail;
   const userPass = req.body.userPass;
   const newUser = {
-    id: userID,
+    id: makeRandomId(),
     email: userEmail,
     password: userPass
   }
   console.log('\nNew User object: ', newUser)
-  console.log('\nUser ID: ', userID);
   console.log('\nUser Email: ', userEmail);
   console.log('\nUser Pass: ', userPass);
   // TODO: Add newUser object to 'users' database object:
   // users database have keys which are the same as the userID.
-  users[userID] = newUser;
-  req.session.user_id  = users[userID].id
+  // TODO: Registration errors:
+  // 1. if users email === blank --> return a 404 status
+  // 2. if users password === blank --> return a 404 status
+  if (userEmail.length === 0 || userPass === 0) {
+    res.status(404).send(
+      `The <i><b>Email</b></i> and <i><b>Password</b></i> fields <u>cannot be blank</u>!`
+    );
+  }
+  users[newUser.id] = newUser;
+  req.session.user_id  = users[newUser.id].id
   res.redirect('/urls');
   console.log(users);
 });
