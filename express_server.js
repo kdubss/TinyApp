@@ -173,11 +173,15 @@ app.post('/register', (req, res) => {
     res.status(404).send(
       `The <i><b>Email</b></i> and <i><b>Password</b></i> fields <u>cannot be blank</u>!`
     );
+  } else if (newUser.email === findUserByEmail(newUser.email)['email']) {
+    res.status(400).send(
+      `Bad Request! The <i><b>Email</b></i> is <u>already registered</u>! Please register with another email.`
+    );
+  } else {
+    users[newUser.id] = newUser;
+    req.session.user_id  = users[newUser.id].id
+    res.redirect('/urls');
   }
-  users[newUser.id] = newUser;
-  req.session.user_id  = users[newUser.id].id
-  res.redirect('/urls');
-  console.log(users);
 });
 
 app.get('/login', (req, res) => {
