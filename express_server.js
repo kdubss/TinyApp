@@ -101,6 +101,10 @@ app.get('/urls/:id', (req, res) => {
   });
 });
 
+app.post('/urls/:id/delete', (req, res) => {
+  delete urlDatabase[req.params.id]
+});
+
 // TODO: In our urls_index.ejs template we will add a form element for
 // each shortened URL. The form should use POST method:
 // TODO: Add a POST route that removes a URL resource: POST /urls/:id/delete
