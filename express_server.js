@@ -66,26 +66,25 @@ app.get('/', (req, res) => {
   res.redirect('urls_home');
 });
 app.get('/urls_home', (req, res) => {
-  const loggedInUser = req.session.user_id;
-  console.log('\nSession for logged in user: ', loggedInUser);
-  res.render('urls_home');
+  const user = users[req.session.user_id];
+  console.log('\nSession for logged in user: ', user.email);
+  res.render('urls_home', {
+    user: user
+  });
 })
-
-app.get('/hello', (req, res) => {
-  res.send(`\nURL Database: ${urlDatabase}`);
-});
 
 // TODO: Add new route handler ('/urls') and use res.render() to pass url
 // data to the url_index.ejs template.
 app.get('/urls', (req, res) => {
-  const userLoggedIn = req.session.user_id;
-  if (!userLoggedIn) {
+  const user = users[req.session.user_id];
+  if (!user) {
     res.status(401).send(`Unauthorized access! Have you logged in? Click <a href='/login'>here</a>`)
     res.redirect('/');
   } else {
     res.render('urls_index', {
       urls: urlDatabase,
-      shortURL: req.params.id
+      shortURL: req.params.id,
+      user: user
     });
     res.redirect('/urls');
   }
@@ -101,11 +100,13 @@ app.get('/urls', (req, res) => {
 // TODO: Fill out the urls_show.ejs template to display the following:
 // The full URL and its shortened form.
 app.get('/urls/:id', (req, res) => {
-  const shortURL = req.params.id
+  const user = users[req.session.user_id];
+  const shortURL = req.params.id;
   res.render('urls_show', {
     urls: urlDatabase,
     shortURL: shortURL,
-    longURL: urlDatabase[shortURL]
+    longURL: urlDatabase[shortURL],
+    user: user
   });
 });
 
@@ -173,20 +174,19 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
+  const user = users[req.session.user_id];
   res.render('urls_login', {
   });
 });
 
 app.post('/login', (req, res) => {
-  console.log('\nMaking a POST to the /login endpoint');
   const email = req.body.email;
   const password = req.body.password;
   const user = findUserByEmail(email);
   if (!(users[user.id])) {
-    res.send('You are not registered, please register <a href=\'/register\'>here</a>');
+    res.send(`You are not registered! Click <a href='/register'>here</a> to register`);
   } else {
     req.session.user_id = user.id
-    console.log('\nCooke Session for Logged In User: ', req.session.user_id);
     res.redirect('/');
   }
 });
