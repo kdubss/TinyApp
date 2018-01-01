@@ -66,6 +66,8 @@ app.get('/', (req, res) => {
   res.redirect('urls_home');
 });
 app.get('/urls_home', (req, res) => {
+  const loggedInUser = req.session.user_id;
+  console.log('\nSession for logged in user: ', loggedInUser);
   res.render('urls_home');
 })
 
@@ -76,11 +78,17 @@ app.get('/hello', (req, res) => {
 // TODO: Add new route handler ('/urls') and use res.render() to pass url
 // data to the url_index.ejs template.
 app.get('/urls', (req, res) => {
-  console.log('\nWe\'re about to render the EJS page!\n');
-  res.render('urls_index', {
-    urls: urlDatabase,
-    shortURL: req.params.id
-  });
+  const userLoggedIn = req.session.user_id;
+  if (!userLoggedIn) {
+    res.status(401).send(`Unauthorized access! Have you logged in? Click <a href='/login'>here</a>`)
+    res.redirect('/');
+  } else {
+    res.render('urls_index', {
+      urls: urlDatabase,
+      shortURL: req.params.id
+    });
+    res.redirect('/urls');
+  }
 });
 
 // TODO: Now you're going to add another page,
@@ -178,6 +186,7 @@ app.post('/login', (req, res) => {
     res.send('You are not registered, please register <a href=\'/register\'>here</a>');
   } else {
     req.session.user_id = user.id
+    console.log('\nCooke Session for Logged In User: ', req.session.user_id);
     res.redirect('/');
   }
 });
