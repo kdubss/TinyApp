@@ -1,11 +1,11 @@
 <% if (!user) { %>
-  <p>You are not logged in!</p>
-  <button><a href='/register'>Register</a></button>
-  <button><a href='/login'>Login</a></button>
+  <p>
+  You are not logged in!
 
   <form action='/logout' method='POST'>
     <button type='submit'>Logout</button>
   </form>
+  </p>
 <% } else { %>
   <p>You are logged in as <%= user.email %></p>
 <% } %>
