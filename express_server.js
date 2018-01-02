@@ -202,7 +202,7 @@ app.post('/login', (req, res) => {
   } else if (!users[user.id]) {
     res.status(401).send(`<b>401 Unauthorized</b>! Have you <a href='/register'>registered</a>? <a href='/login'>Try again.</a>`);
   } else {
-    if (userPass !== users[user.id].password) {
+    if (!bcrypt.compareSync(userPass, users[user.id].password)) {
       res.status(401).send(`<b>401 Unauthorized</b>! Email and/or password is incorrect! <a href='/login'>Try again.</a>`);
     }
     else {
