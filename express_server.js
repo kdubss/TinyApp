@@ -171,18 +171,17 @@ app.post('/register', (req, res) => {
   // 2. if users password === blank --> return a 404 status
   if (userEmail.length === 0 || userPass === 0) {
     res.status(404).send(
-      `The <i><b>Email</b></i> and <i><b>Password</b></i> fields <u>cannot be blank</u>!`
+      `The <b>Email</b> and <b>Password</b> fields <u>cannot be blank</u>! <a href='/register'>Try again.</a>`
     );
+  } else if (newUser.email === findUserByEmail(newUser.email)['email']) {
+    res.status(400).send(
+      `Bad Request! The <b>Email</b> is <u>already registered</u>! Please <a href='/register'>register</a> with another email or <a href='/'>go back</a>.`
+    );
+  } else {
+    users[newUser.id] = newUser;
+    req.session.user_id = users[newUser.id].id;
+    res.redirect('/urls');
   }
-  // } else if (newUser.email === findUserByEmail(newUser.email)['email']) {
-  //   res.status(400).send(
-  //     `Bad Request! The <i><b>Email</b></i> is <u>already registered</u>! Please <a href='/register'>register</a> with another email or <a href='/'>go back</a>.`
-  //   );
-  // } else {
-  //   users[newUser.id] = newUser;
-  //   req.session.user_id  = users[newUser.id].id
-  //   res.redirect('/urls');
-  // }
 });
 
 app.get('/login', (req, res) => {
