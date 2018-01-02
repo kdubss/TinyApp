@@ -159,7 +159,7 @@ app.post('/register', (req, res) => {
   const newUser = {
     id: makeRandomId(),
     email: userEmail,
-    password: userPass
+    password: bcrypt.hashSync(userPass, 10)
   }
   console.log('\nNew User object: ', newUser)
   console.log('\nUser Email: ', userEmail);
