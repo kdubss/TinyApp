@@ -173,32 +173,43 @@ app.post('/register', (req, res) => {
     res.status(404).send(
       `The <i><b>Email</b></i> and <i><b>Password</b></i> fields <u>cannot be blank</u>!`
     );
-  } else if (newUser.email === findUserByEmail(newUser.email)['email']) {
-    res.status(400).send(
-      `Bad Request! The <i><b>Email</b></i> is <u>already registered</u>! Please register with another email.`
-    );
-  } else {
-    users[newUser.id] = newUser;
-    req.session.user_id  = users[newUser.id].id
-    res.redirect('/urls');
   }
+  // } else if (newUser.email === findUserByEmail(newUser.email)['email']) {
+  //   res.status(400).send(
+  //     `Bad Request! The <i><b>Email</b></i> is <u>already registered</u>! Please <a href='/register'>register</a> with another email or <a href='/'>go back</a>.`
+  //   );
+  // } else {
+  //   users[newUser.id] = newUser;
+  //   req.session.user_id  = users[newUser.id].id
+  //   res.redirect('/urls');
+  // }
 });
 
 app.get('/login', (req, res) => {
   const user = users[req.session.user_id];
   res.render('urls_login', {
+    user: user
   });
 });
 
 app.post('/login', (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const user = findUserByEmail(email);
-  if (!(users[user.id])) {
-    res.send(`You are not registered! Click <a href='/register'>here</a> to register`);
+  const userEmail = req.body.email;
+  const userPass = req.body.password;
+  const user = findUserByEmail(userEmail);
+  console.log('\nInput email length: ', userEmail.length);
+  console.log('\nInput Password length: ', userPass.length);
+  if (userEmail.length === 0 || userPass.length === 0) {
+    res.status(403).send(`<b>403 Forbidden</b>! <b>Email</b> & <b>password</b> <u>cannot be blank</u>! <a href='/login'>Try again</a>!`);
+  } else if (!users[user.id]) {
+    res.status(401).send(`<b>401 Unauthorized</b>! Have you <a href='/register'>registered</a>? <a href='/login'>Try again.</a>`);
   } else {
-    req.session.user_id = user.id
-    res.redirect('/');
+    if (userPass !== users[user.id].password) {
+      res.status(401).send(`<b>401 Unauthorized</b>! Email and/or password is incorrect! <a href='/login'>Try again.</a>`);
+    }
+    else {
+      req.session.user_id = users[user.id].id
+      res.redirect('/urls');
+    }
   }
 });
 
